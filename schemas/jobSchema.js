@@ -24,6 +24,14 @@ const jobSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  city: {
+    type: String,
+    required: true,
+  },
+  category: {
+    type: String,
+    required: true,
+  },
   vacancy: {
     type: String,
     required: true,

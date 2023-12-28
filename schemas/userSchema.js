@@ -7,7 +7,11 @@ const userAccountSchema = new mongoose.Schema({
     default: uuidv4,
     required: true,
   },
-  name: {
+  firstName: {
+    type: String,
+    required:true
+  },
+  lastName: {
     type: String,
     required:true
   },

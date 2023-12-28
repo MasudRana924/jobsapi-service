@@ -7,9 +7,15 @@ const createApplyJob = async (data) => {
 const userJob = async (userId) => {
     const job = await ApplyJob.find({ userId: userId });
     return job;
-  };
+};
 
+
+const jobApplyNumber=async(jobId)=>{
+  const job = await ApplyJob.find({ jobId: jobId }).count();
+  return job;
+}
 module.exports={
     createApplyJob ,
-    userJob
+    userJob,
+    jobApplyNumber
 }

@@ -5,7 +5,10 @@ const createJob = async (data) => {
   return createdNewJob;
 };
 const getAllJobs = async () => {
-  const jobs = await Job.find({status:'pending'}).sort({createdAt:-1});
+  const jobs = await Job.find({status:'approved'}).sort({createdAt:-1});
+  // const jobs = await Job.find({
+  //   status: { $in: ['pending', 'approved'] }
+  // }).sort({ createdAt: -1 });
   return jobs;
 };
 const getSingleJob = async (jobId) => {

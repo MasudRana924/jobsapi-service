@@ -7,7 +7,7 @@ const bcrypt = require("bcrypt");
 
 const userRegistration = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const {firstName,lastName, email, password } = req.body;
     const isEmailExist = await UserModel.findAccountByEmail(email);
     if (isEmailExist) {
       throw Object.assign(new Error(), {
@@ -19,7 +19,7 @@ const userRegistration = async (req, res) => {
     }
     const hashPassword = await bcrypt.hash(password, 9);
     const newUser = await UserModel.createUserAccount({
-      name,
+      firstName,lastName, 
       email,
       password: hashPassword,
     });
@@ -34,6 +34,8 @@ const userRegistration = async (req, res) => {
 const generateJWTToken = (user) => {
   const userData = {
     userId:user.userId,
+    firstName:user.firstName,
+    lastName:user.lastName,
     email: user.email,
     role: user.role,
   };
@@ -67,7 +69,8 @@ const userLogin = async (req, res) => {
     const token = generateJWTToken(user);
     const responseData = {
       token,
-      name: user.name,
+      firstName: user.firstName,
+      lastName: user.lastName,
       email: user.email,
       role: user.role,
     };

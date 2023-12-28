@@ -24,8 +24,21 @@ const getUserJob = async (req, res) => {
     } catch (err) {
       errorResponseHandler(err, req, res);
     }
-  };
+};
+
+const getApplyJobCOunt = async (req, res) => {
+  try {
+    const { jobId } = req.params;
+    const job = await ApplyJobModel.jobApplyNumber(jobId);
+    res.success(job, "Job get successfully.");
+  } catch (err) {
+    errorResponseHandler(err, req, res);
+  }
+};
+
+
 module.exports={
     createNewApplyJob,
-    getUserJob
+    getUserJob,
+    getApplyJobCOunt
 }

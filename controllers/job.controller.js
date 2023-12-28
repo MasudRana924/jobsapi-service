@@ -2,7 +2,7 @@ const JobModel = require("../models/job");
 const { errorResponseHandler } = require("../helper/errorrResponseHandler.js");
 const createNewJob = async (req, res) => {
   try {
-    const { companyName, salary, title,location,vacancy, description } = req.body;
+    const { companyName, salary, title,city,category,location,vacancy, description } = req.body;
     const {userId}=req.user
 
     const newJob = await JobModel.createJob({
