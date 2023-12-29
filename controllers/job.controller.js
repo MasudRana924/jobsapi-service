@@ -11,6 +11,8 @@ const createNewJob = async (req, res) => {
       location,
       vacancy,
       description,
+      time,
+      type,
     } = req.body;
     const { userId } = req.user;
 
@@ -23,6 +25,8 @@ const createNewJob = async (req, res) => {
       category,
       vacancy,
       description,
+      time,
+      type,
       userId,
     });
     res.created(newJob, "Job is created");
@@ -43,7 +47,7 @@ const createNewJob = async (req, res) => {
 // };
 const getJobsLists = async (req, res) => {
   try {
-    const { city, category, search } = req.query;
+    const { city, category, search, type, time } = req.query;
 
     // Construct filters object
     const filters = {};
@@ -55,6 +59,12 @@ const getJobsLists = async (req, res) => {
 
     if (category) {
       filters.category = category;
+    }
+    if (type) {
+      filters.type = type;
+    }
+    if (time) {
+      filters.time = time;
     }
     if (search) {
       filters.search = search;

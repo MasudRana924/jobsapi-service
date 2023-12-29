@@ -22,6 +22,12 @@ const getAllJobs = async (filters) => {
   if (filters.category) {
     query.category =filters.category;
   }
+  if (filters.type) {
+    query.type =filters.type;
+  }
+  if (filters.time) {
+    query.time =filters.time;
+  }
   if (filters.search) {
     query.$text = { $search: filters.search };
   }

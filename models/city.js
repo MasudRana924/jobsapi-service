@@ -4,10 +4,6 @@ const createCity = async (data) => {
   const createdCity = await newCity.save();
   return createdCity;
 };
-// const findAccountByEmail = async (email) => {
-//   const userAccount = await UserAccount.findOne({ email }).lean();
-//   return userAccount;
-// };
 
 const getAllCity = async () => {
     const cities = await City.find().sort({createdAt:-1});
