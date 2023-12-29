@@ -2,31 +2,72 @@ const JobModel = require("../models/job");
 const { errorResponseHandler } = require("../helper/errorrResponseHandler.js");
 const createNewJob = async (req, res) => {
   try {
-    const { companyName, salary, title,city,category,location,vacancy, description } = req.body;
-    const {userId}=req.user
+    const {
+      companyName,
+      salary,
+      title,
+      city,
+      category,
+      location,
+      vacancy,
+      description,
+    } = req.body;
+    const { userId } = req.user;
 
     const newJob = await JobModel.createJob({
       companyName,
       salary,
       title,
       location,
+      city,
+      category,
       vacancy,
       description,
-      userId
+      userId,
     });
     res.created(newJob, "Job is created");
   } catch (err) {
     errorResponseHandler(err, req, res);
   }
 };
+// const getJobsLists = async (req, res) => {
+//   try {
+
+//     const { city} = req.query;
+//     console.log("city",city);
+//          const jobs = await JobModel.getAllJobs();
+//     res.success(jobs, "Job Fetched Successfully.");
+//   } catch (err) {
+//     errorResponseHandler(err, req, res);
+//   }
+// };
 const getJobsLists = async (req, res) => {
   try {
-    const jobs = await JobModel.getAllJobs();
-    res.success(jobs, "Job Fetched Successfully.");
+    const { city, category, search } = req.query;
+
+    // Construct filters object
+    const filters = {};
+
+    // Add filters based on the provided parameters
+    if (city) {
+      filters.city = city;
+    }
+
+    if (category) {
+      filters.category = category;
+    }
+    if (search) {
+      filters.search = search;
+    }
+    // Call the getAllJobs function with the filters
+    const jobs = await JobModel.getAllJobs(filters);
+
+    res.success(jobs, "Jobs Fetched Successfully.");
   } catch (err) {
     errorResponseHandler(err, req, res);
   }
 };
+
 const getJob = async (req, res) => {
   try {
     const { jobId } = req.params;
@@ -48,7 +89,7 @@ const deleteJob = async (req, res) => {
   }
 };
 
-// user uploaded job list 
+// user uploaded job list
 const getEmployerJob = async (req, res) => {
   try {
     const { userId } = req.user;
@@ -83,5 +124,5 @@ module.exports = {
   deleteJob,
   getEmployerJob,
   getEmployerPendingJob,
-  getEmployerApprovedJob
+  getEmployerApprovedJob,
 };

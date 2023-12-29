@@ -37,6 +37,12 @@ const userAccountSchema = new mongoose.Schema({
   image: {
     type: String,
   },
+  resume: {
+    type: String,
+  },
+  education: {
+    type: String,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

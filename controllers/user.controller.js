@@ -80,6 +80,46 @@ const userLogin = async (req, res) => {
   }
 };
 
+const updateProfile = async (req, res) => {
+  try {
+    const { firstName,lastName,email,degree,eduName, phone, address } = req.body;
+    const { usertId } = req.user;
+    // let result = {};
+    // const options = {
+    //   use_filename: true,
+    //   unique_filename: false,
+    //   overwrite: true,
+    // };
+    // if (req.file) {
+    //   const file = req.file;
+    //   result = await cloudinary.uploader.upload(file.path, options);
+    //   fs.unlink(file.path, function (err) {
+    //     if (err) throw err;
+    //   });
+    // }
+    const newUserdata = {firstName,lastName,email,degree,eduName, phone, address };
+    // if (result.url) {
+    //   newUserdata.image = result.url;
+    // }
+    const updateUserProfile = await StudentModel.updateProfile(
+      usertId,
+      newUserdata
+    );
+    const responseData = {
+      firstName: updateUserProfile?.firstName,
+      lastName: updateUserProfile?.lastName,
+      email: updateUserProfile?.email,
+      phone: updateUserProfile?.phone,
+      address: updateUserProfile?.address,
+      degree: updateUserProfile?.degree,
+      eduName: updateUserProfile?.eduName,
+    };
+    res.created(responseData, "User profile successfully updated");
+  } catch (err) {
+    errorResponseHandler(err, req, res);
+  }
+};
+
 module.exports = {
   userRegistration,
   userLogin,
