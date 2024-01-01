@@ -109,6 +109,7 @@ const getEmployerJob = async (req, res) => {
     errorResponseHandler(err, req, res);
   }
 };
+
 const getEmployerPendingJob = async (req, res) => {
   try {
     const { userId } = req.user;
@@ -127,6 +128,41 @@ const getEmployerApprovedJob = async (req, res) => {
     errorResponseHandler(err, req, res);
   }
 };
+
+const getEmployerJobByDate = async (req, res) => {
+  // try {
+  //   const { userId } = req.user;
+
+  //   // You can specify the timeFilter as 'today' to get jobs uploaded today
+  //   const timeFilter = 'today';
+
+  //   const job = await JobModel.employerJobByDate(userId, timeFilter);
+  //   res.success(job, `Employer uploaded job for today fetched successfully.`);
+  // } catch (err) {
+  //   errorResponseHandler(err, req, res);
+  // }
+  try {
+    const { userId } = req.user;
+    
+    // Set the number of days for the time range (e.g., 10 days ago)
+    const daysAgo = 10;
+
+    const job = await JobModel.employerJobByDate(userId, daysAgo);
+    res.success(job, `Employer uploaded job for the last ${daysAgo} days fetched successfully.`);
+  } catch (err) {
+    errorResponseHandler(err, req, res);
+  }
+};
+const getEmployerTodaysJob = async (req, res) => {
+  try {
+    const { userId } = req.user;
+    const job = await JobModel.employerTodaysJob(userId);
+    res.success(job, "Employer uploaded jobs for today fetched successfully.");
+  } catch (err) {
+    errorResponseHandler(err, req, res);
+  }
+};
+
 module.exports = {
   createNewJob,
   getJobsLists,
@@ -135,4 +171,6 @@ module.exports = {
   getEmployerJob,
   getEmployerPendingJob,
   getEmployerApprovedJob,
+  getEmployerJobByDate,
+  getEmployerTodaysJob,
 };

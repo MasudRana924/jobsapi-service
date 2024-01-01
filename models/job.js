@@ -57,6 +57,54 @@ const employerApprovedJob = async (userId) => {
   const job = await Job.find({userId: userId,status:'approved'}).exec();
   return job;
 };
+
+
+const employerJobByDate = async (userId, daysAgo) => {
+  // let startDate, endDate;
+
+  // if (timeFilter === 'today') {
+  //   startDate = new Date();
+  //   startDate.setHours(0, 0, 0, 0); // Set to the beginning of the day
+  //   endDate = new Date();
+  //   endDate.setHours(23, 59, 59, 999); // Set to the end of the day
+  // } else {
+  //   // Default to today's date if no timeFilter is provided
+  //   startDate = new Date();
+  //   endDate = new Date();
+  // }
+
+  // const job = await Job.find({
+  //   userId: userId,
+  //   createdAt: { $gte: startDate, $lte: endDate }
+  // });
+
+  // return job;
+  const startDate = new Date();
+
+  startDate.setDate(startDate.getDate() - daysAgo);
+  const endDate = new Date();
+  console.log('startDate:', startDate.toDateString());
+  console.log('endDate:', endDate.toDateString());
+  // console.log(startDate.setDate(startDate.getDate() - daysAgo))
+  const job = await Job.find({
+    userId: userId,
+    createdAt: { $gte: startDate, $lte: endDate }
+  });
+
+  return job;
+};
+
+const employerTodaysJob = async (userId) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // Set to the beginning of the day
+
+  const job = await Job.find({
+    userId: userId,
+    createdAt: { $gte: today }
+  });
+
+  return job;
+};
 module.exports = {
   createJob,
   getAllJobs,
@@ -64,5 +112,7 @@ module.exports = {
   deleteSingleJob,
   employerJob,
   employerPendingJob,
-  employerApprovedJob
+  employerApprovedJob,
+  employerJobByDate,
+  employerTodaysJob,
 };

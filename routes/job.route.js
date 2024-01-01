@@ -4,6 +4,8 @@ const {
   getJobsLists,
   getJob,
   deleteJob,
+  getEmployerJobByDate,
+  getEmployerTodaysJob,
 } = require("../controllers/job.controller");
 const { employerAuthenticate, userAuthenticate } = require("../middleware/authenticate");
 const { getApplyJobCOunt } = require("../controllers/applyJob.controller");
@@ -21,5 +23,7 @@ router.post("/create/type",employerAuthenticate,createNewType);
 router.get("/type",getTypes);
 router.post("/create/time",employerAuthenticate,createNewTime);
 router.get("/time",getTimes);
+router.get("/lastweek/job",employerAuthenticate,getEmployerJobByDate);
+router.get("/todays/job",employerAuthenticate,getEmployerTodaysJob);
 
 module.exports = router;
