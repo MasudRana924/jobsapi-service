@@ -17,7 +17,6 @@ const createNewType = async (req, res) => {
 const getTypes = async (req, res) => {
   try {
     const types = await TypeModel.getAllType();
-    console.log("types", types);
     res.success(types, "Job Type Fetched Successfully.");
   } catch (err) {
     errorResponseHandler(err, req, res);

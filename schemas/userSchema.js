@@ -43,6 +43,9 @@ const userAccountSchema = new mongoose.Schema({
   education: {
     type: String,
   },
+  degree: {
+    type: String,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

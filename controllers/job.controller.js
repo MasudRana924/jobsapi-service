@@ -34,17 +34,7 @@ const createNewJob = async (req, res) => {
     errorResponseHandler(err, req, res);
   }
 };
-// const getJobsLists = async (req, res) => {
-//   try {
 
-//     const { city} = req.query;
-//     console.log("city",city);
-//          const jobs = await JobModel.getAllJobs();
-//     res.success(jobs, "Job Fetched Successfully.");
-//   } catch (err) {
-//     errorResponseHandler(err, req, res);
-//   }
-// };
 const getJobsLists = async (req, res) => {
   try {
     const { city, category, search, type, time } = req.query;
@@ -143,12 +133,15 @@ const getEmployerJobByDate = async (req, res) => {
   // }
   try {
     const { userId } = req.user;
-    
+
     // Set the number of days for the time range (e.g., 10 days ago)
     const daysAgo = 10;
 
     const job = await JobModel.employerJobByDate(userId, daysAgo);
-    res.success(job, `Employer uploaded job for the last ${daysAgo} days fetched successfully.`);
+    res.success(
+      job,
+      `Employer uploaded job for the last ${daysAgo} days fetched successfully.`
+    );
   } catch (err) {
     errorResponseHandler(err, req, res);
   }
@@ -162,7 +155,38 @@ const getEmployerTodaysJob = async (req, res) => {
     errorResponseHandler(err, req, res);
   }
 };
+// admin section
+const getAdminJobsLists = async (req, res) => {
+  try {
+    const jobs = await JobModel.getAdminAllJob();
+    res.success(jobs, "Job Fetched Successfully.");
+  } catch (err) {
+    errorResponseHandler(err, req, res);
+  }
+};
 
+// update single job
+const updatedJob = async (req, res) => {
+  try {
+    const { status } = req.body;
+    console.log("body", status);
+    const { jobId } = req.params;
+    const newUpdatedData = { status };
+    console.log("newUpdatedData",newUpdatedData);
+    const updateJobStatus = await JobModel.adminUpdateSingleJob(
+      jobId,
+      newUpdatedData
+    );
+    console.log("updateJobStatus",updateJobStatus);
+    const responseData = {
+      status: updateJobStatus?.status,
+    };
+    console.log("response data --- ", responseData);
+    res.created(responseData, "Job  updated");
+  } catch (err) {
+    errorResponseHandler(err, req, res);
+  }
+};
 module.exports = {
   createNewJob,
   getJobsLists,
@@ -173,4 +197,6 @@ module.exports = {
   getEmployerApprovedJob,
   getEmployerJobByDate,
   getEmployerTodaysJob,
+  getAdminJobsLists,
+  updatedJob,
 };

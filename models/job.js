@@ -5,14 +5,14 @@ const createJob = async (data) => {
   const createdNewJob = await newJob.save();
   return createdNewJob;
 };
-// const getAllJobs = async () => {
-//   const jobs = await Job.find({status:'approved'}).sort({createdAt:-1});
-//   return jobs;
-// };
+const getAdminAllJob = async () => {
+  const jobs = await Job.find().sort({ createdAt: -1 });
+  return jobs;
+};
 
 const getAllJobs = async (filters) => {
   // Construct the base query with the 'status' filter
-  const query = { status: 'approved' };
+  const query = { status: "approved" };
 
   // Add additional filters based on the provided parameters
   if (filters.city) {
@@ -20,13 +20,13 @@ const getAllJobs = async (filters) => {
   }
 
   if (filters.category) {
-    query.category =filters.category;
+    query.category = filters.category;
   }
   if (filters.type) {
-    query.type =filters.type;
+    query.type = filters.type;
   }
   if (filters.time) {
-    query.time =filters.time;
+    query.time = filters.time;
   }
   if (filters.search) {
     query.$text = { $search: filters.search };
@@ -38,7 +38,7 @@ const getAllJobs = async (filters) => {
 };
 
 const getSingleJob = async (jobId) => {
-  const job = await Job.findOne({jobId:jobId });
+  const job = await Job.findOne({ jobId: jobId });
   return job;
 };
 const deleteSingleJob = async (jobId) => {
@@ -50,14 +50,13 @@ const employerJob = async (userId) => {
   return job;
 };
 const employerPendingJob = async (userId) => {
-  const job = await Job.find({userId: userId,status:'pending'}).exec();
+  const job = await Job.find({ userId: userId, status: "pending" }).exec();
   return job;
 };
 const employerApprovedJob = async (userId) => {
-  const job = await Job.find({userId: userId,status:'approved'}).exec();
+  const job = await Job.find({ userId: userId, status: "approved" }).exec();
   return job;
 };
-
 
 const employerJobByDate = async (userId, daysAgo) => {
   // let startDate, endDate;
@@ -83,12 +82,12 @@ const employerJobByDate = async (userId, daysAgo) => {
 
   startDate.setDate(startDate.getDate() - daysAgo);
   const endDate = new Date();
-  console.log('startDate:', startDate.toDateString());
-  console.log('endDate:', endDate.toDateString());
+  console.log("startDate:", startDate.toDateString());
+  console.log("endDate:", endDate.toDateString());
   // console.log(startDate.setDate(startDate.getDate() - daysAgo))
   const job = await Job.find({
     userId: userId,
-    createdAt: { $gte: startDate, $lte: endDate }
+    createdAt: { $gte: startDate, $lte: endDate },
   });
 
   return job;
@@ -100,10 +99,20 @@ const employerTodaysJob = async (userId) => {
 
   const job = await Job.find({
     userId: userId,
-    createdAt: { $gte: today }
-  });
+    createdAt: { $gte: today },
+  }).count();
 
   return job;
+};
+
+// admin
+const adminUpdateSingleJob = async (jobId, updateData) => {
+  const updatedJob = await Job.findOneAndUpdate({ jobId:jobId }, updateData, {
+    runValidators: true,
+    useFindAndModify: false,
+    new: true,
+  });
+  return updatedJob;
 };
 module.exports = {
   createJob,
@@ -115,4 +124,6 @@ module.exports = {
   employerApprovedJob,
   employerJobByDate,
   employerTodaysJob,
+  getAdminAllJob,
+  adminUpdateSingleJob,
 };

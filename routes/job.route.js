@@ -17,7 +17,7 @@ const router = Router();
 router.post("/create/new",employerAuthenticate,createNewJob);
 router.get("/get/all", getJobsLists);
 router.get("/get/:jobId", getJob);
-router.delete("/get/:jobId", deleteJob);
+router.delete("/delete/:jobId", deleteJob);
 router.get('/total/applyno/:jobId',getApplyJobCOunt);
 router.post("/create/type",employerAuthenticate,createNewType);
 router.get("/type",getTypes);
