@@ -1,4 +1,5 @@
 const JobModel = require("../models/job");
+const Job = require('../schemas/jobSchema.js')
 const { errorResponseHandler } = require("../helper/errorrResponseHandler.js");
 const createNewJob = async (req, res) => {
   try {
@@ -168,21 +169,17 @@ const getAdminJobsLists = async (req, res) => {
 // update single job
 const updatedJob = async (req, res) => {
   try {
-    const { status } = req.body;
-    console.log("body", status);
     const { jobId } = req.params;
-    const newUpdatedData = { status };
-    console.log("newUpdatedData",newUpdatedData);
+    const newUpdatedData = req.body
     const updateJobStatus = await JobModel.adminUpdateSingleJob(
       jobId,
       newUpdatedData
     );
-    console.log("updateJobStatus",updateJobStatus);
     const responseData = {
       status: updateJobStatus?.status,
     };
-    console.log("response data --- ", responseData);
     res.created(responseData, "Job  updated");
+   
   } catch (err) {
     errorResponseHandler(err, req, res);
   }

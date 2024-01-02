@@ -107,11 +107,10 @@ const employerTodaysJob = async (userId) => {
 
 // admin
 const adminUpdateSingleJob = async (jobId, updateData) => {
-  const updatedJob = await Job.findOneAndUpdate({ jobId:jobId }, updateData, {
-    runValidators: true,
-    useFindAndModify: false,
-    new: true,
-  });
+  const updatedJob = await Job.findOneAndUpdate(
+    { jobId: jobId },
+    { $set: updateData }
+  );
   return updatedJob;
 };
 module.exports = {
