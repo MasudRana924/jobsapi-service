@@ -106,10 +106,21 @@ const deleteJob = async (req, res) => {
 
 // user uploaded job list
 const getEmployerJob = async (req, res) => {
+  // try {
+  //   const { userId } = req.user;
+  //   const job = await JobModel.employerJob(userId);
+  //   res.success(job, "Employer uploaded job get successfully.");
+  // } catch (err) {
+  //   errorResponseHandler(err, req, res);
+  // }
   try {
     const { userId } = req.user;
-    const job = await JobModel.employerJob(userId);
-    res.success(job, "Employer uploaded job get successfully.");
+    const { page, perPage } = req.query;
+    const {jobs,totalJobs} = await JobModel.employerJob(userId, page, perPage);
+    const allJobs={
+      jobs,totalJobs
+    }
+    res.success(allJobs , "Employer uploaded job get successfully.");
   } catch (err) {
     errorResponseHandler(err, req, res);
   }

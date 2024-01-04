@@ -10,7 +10,7 @@ const getAdminAllJob = async () => {
   return jobs;
 };
 
-const getAllJobs = async (filters, page = 1, perPage = 1) => {
+const getAllJobs = async (filters, page = 1, perPage) => {
   // Construct the base query with the 'status' filter
   const query = { status: "approved" };
 
@@ -43,10 +43,10 @@ const getAllJobs = async (filters, page = 1, perPage = 1) => {
     .skip(skip)
     .limit(perPage)
     .sort({ createdAt: -1 });
-    const totalJobs = await Job.countDocuments(query);
+  const totalJobs = await Job.countDocuments(query);
 
-    return { jobs, totalJobs };
-}
+  return { jobs, totalJobs };
+};
 const getSingleJob = async (jobId) => {
   const job = await Job.findOne({ jobId: jobId });
   return job;
@@ -55,9 +55,21 @@ const deleteSingleJob = async (jobId) => {
   const job = await Job.findByIdAndDelete({ _id: jobId });
   return job;
 };
-const employerJob = async (userId) => {
-  const job = await Job.find({ userId: userId });
-  return job;
+const employerJob = async (userId, page = 1, perPage = 1) => {
+  // const job = await Job.find({ userId: userId });
+  // return job;
+  const options = {
+    page: parseInt(page, 10),
+    limit: parseInt(perPage, 10),
+  };
+
+  const jobs = await Job.find({ userId: userId })
+    .skip(options.limit * (options.page - 1))
+    .limit(options.limit);
+    const totalJobs = await Job.find({userId:userId}).countDocuments();
+    console.log("employer job --- ",totalJobs);
+
+  return {jobs,totalJobs};
 };
 const employerPendingJob = async (userId) => {
   const job = await Job.find({ userId: userId, status: "pending" }).exec();
