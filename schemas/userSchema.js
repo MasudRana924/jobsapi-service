@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const uuidv4 = require("uuid").v4;
+const bcrypt = require("bcrypt");
 //Create a schema for the USer
 const userAccountSchema = new mongoose.Schema({
   userId: {
@@ -55,6 +56,10 @@ const userAccountSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
+userAccountSchema.methods.comparePassword = async function (password) {
+	return await bcrypt.compare(password, this.password);
+};
 
 const UserAccount = mongoose.model("UserAccount", userAccountSchema);
 module.exports = UserAccount;
+

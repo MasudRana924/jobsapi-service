@@ -3,6 +3,7 @@ const {
   userRegistration,
   userLogin,
   updateProfile,
+  updatePassword,
 } = require("../controllers/user.controller");
 const {
   getEmployerJob,
@@ -31,8 +32,9 @@ router.get("/pending/job", employerAuthenticate, getEmployerPendingJob);
 router.get("/approved/job", employerAuthenticate, getEmployerApprovedJob);
 
 // user apply job route
-router.post("/apply/job", userAuthenticate, createNewApplyJob);
+router.post("/apply/job", userAuthenticate,upload.single("resume"), createNewApplyJob);
 router.put("/update/profile", userAuthenticate, upload.single("resume"), updateProfile);
+router.put("/update/password", userAuthenticate,updatePassword);
 router.get("/apply/job", employerAuthenticate, getUserJob);
 
 // admin section 

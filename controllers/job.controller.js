@@ -1,5 +1,5 @@
 const JobModel = require("../models/job");
-const Job = require('../schemas/jobSchema.js')
+const Job = require("../schemas/jobSchema.js");
 const { errorResponseHandler } = require("../helper/errorrResponseHandler.js");
 const createNewJob = async (req, res) => {
   try {
@@ -38,7 +38,7 @@ const createNewJob = async (req, res) => {
 
 const getJobsLists = async (req, res) => {
   try {
-    const { city, category, search, type, time } = req.query;
+    const { city, category, search, type, time, page, perPage } = req.query;
 
     // Construct filters object
     const filters = {};
@@ -51,19 +51,31 @@ const getJobsLists = async (req, res) => {
     if (category) {
       filters.category = category;
     }
+
     if (type) {
       filters.type = type;
     }
+
     if (time) {
       filters.time = time;
     }
+
     if (search) {
       filters.search = search;
     }
-    // Call the getAllJobs function with the filters
-    const jobs = await JobModel.getAllJobs(filters);
 
-    res.success(jobs, "Jobs Fetched Successfully.");
+    // Default values for page and perPage
+    const currentPage = parseInt(page, 10) || 1;
+    const itemsPerPage = parseInt(perPage, 10) || 4;
+
+    // Call the getAllJobs function with the filters and pagination parameters
+    const jobs = await JobModel.getAllJobs(filters, currentPage, itemsPerPage);
+    const totalJobs = await Job.find().count();
+    const allJobs = {
+      jobs,
+      totalJobs,
+    };
+    res.success(allJobs, "Jobs Fetched Successfully.");
   } catch (err) {
     errorResponseHandler(err, req, res);
   }
@@ -170,7 +182,7 @@ const getAdminJobsLists = async (req, res) => {
 const updatedJob = async (req, res) => {
   try {
     const { jobId } = req.params;
-    const newUpdatedData = req.body
+    const newUpdatedData = req.body;
     const updateJobStatus = await JobModel.adminUpdateSingleJob(
       jobId,
       newUpdatedData
@@ -179,7 +191,6 @@ const updatedJob = async (req, res) => {
       status: updateJobStatus?.status,
     };
     res.created(responseData, "Job  updated");
-   
   } catch (err) {
     errorResponseHandler(err, req, res);
   }

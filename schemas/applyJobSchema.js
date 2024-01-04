@@ -3,15 +3,37 @@ const mongoose = require("mongoose");
 const applyJobSchema = new mongoose.Schema({
   companyName: {
     type: String,
-    required: true,
   },
   title: {
     type: String,
-    required: true,
   },
   jobId: {
     type: String,
     ref: "Job",
+  },
+  firstName: {
+    type: String,
+  },
+  lastName: {
+    type: String,
+  },
+  email: {
+    type: String,
+  },
+  phone: {
+    type: String,
+  },
+  address: {
+    type: String,
+  },
+  resume: {
+    type: String,
+  },
+  education: {
+    type: String,
+  },
+  degree: {
+    type: String,
   },
   userId: {
     type: String,

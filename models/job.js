@@ -10,7 +10,7 @@ const getAdminAllJob = async () => {
   return jobs;
 };
 
-const getAllJobs = async (filters) => {
+const getAllJobs = async (filters, page = 1, perPage = 1) => {
   // Construct the base query with the 'status' filter
   const query = { status: "approved" };
 
@@ -22,21 +22,30 @@ const getAllJobs = async (filters) => {
   if (filters.category) {
     query.category = filters.category;
   }
+
   if (filters.type) {
     query.type = filters.type;
   }
+
   if (filters.time) {
     query.time = filters.time;
   }
+
   if (filters.search) {
     query.$text = { $search: filters.search };
   }
 
-  // Fetch jobs based on the constructed query and sort by 'createdAt'
-  const jobs = await Job.find(query).sort({ createdAt: -1 });
-  return jobs;
-};
+  // Calculate skip value for pagination
+  const skip = (page - 1) * perPage;
 
+  // Fetch jobs based on the constructed query, apply pagination, and sort by 'createdAt'
+  const jobs = await Job.find(query)
+    .skip(skip)
+    .limit(perPage)
+    .sort({ createdAt: -1 });
+
+  return jobs;
+}
 const getSingleJob = async (jobId) => {
   const job = await Job.findOne({ jobId: jobId });
   return job;
