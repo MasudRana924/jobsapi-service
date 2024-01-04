@@ -69,8 +69,10 @@ const getJobsLists = async (req, res) => {
     const itemsPerPage = parseInt(perPage, 10) || 4;
 
     // Call the getAllJobs function with the filters and pagination parameters
-    const jobs = await JobModel.getAllJobs(filters, currentPage, itemsPerPage);
-    const totalJobs = await Job.find().count();
+    // const jobs = await JobModel.getAllJobs(filters, currentPage, itemsPerPage);
+    // const totalJobs = await Job.find().count();
+    // Call the getAllJobs function with the filters and pagination parameters
+    const { jobs, totalJobs } = await JobModel.getAllJobs(filters, currentPage, itemsPerPage);
     const allJobs = {
       jobs,
       totalJobs,

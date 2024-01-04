@@ -43,8 +43,9 @@ const getAllJobs = async (filters, page = 1, perPage = 1) => {
     .skip(skip)
     .limit(perPage)
     .sort({ createdAt: -1 });
+    const totalJobs = await Job.countDocuments(query);
 
-  return jobs;
+    return { jobs, totalJobs };
 }
 const getSingleJob = async (jobId) => {
   const job = await Job.findOne({ jobId: jobId });
